@@ -1,14 +1,15 @@
 import react, { useState, useEffect } from 'react'
 import './styles.css'
 import {Card} from '../../components/Card'
+import Student from '../../Interfaces/Students';
 export function Home() {
 
   const [studentName, setStudentName] = useState('');
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [user, setUser] = useState({name: '', avatar: ''});
 
   function handleAddStudent(){
-    const newStudent = {
+    const newStudent: Student = {
       name: studentName,
       time: new Date().toLocaleTimeString("pt-br", {
         hour: '2-digit',
@@ -17,7 +18,7 @@ export function Home() {
       })
     };
 
-    setStudents(prevState => [...prevState, newStudent]);
+    setStudents([...students, newStudent]);
   }
 
   useEffect(()=>{
@@ -49,7 +50,7 @@ export function Home() {
       <button type='button' onClick={handleAddStudent}>
         Adicionar
       </button>
-
+      
       {
         students.map(student => <Card key={student.time} name={student.name} time={student.time} />)        
       }
