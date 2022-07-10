@@ -1,7 +1,9 @@
 import react, { useState, useEffect } from 'react'
 import './styles.css'
 import {Card} from '../../components/Card'
+import { Button } from '../../components/Button';
 import Student from '../../Interfaces/Students';
+import {Inputs} from '../../components/Inputs';
 export function Home() {
 
   const [studentName, setStudentName] = useState('');
@@ -9,6 +11,8 @@ export function Home() {
   const [user, setUser] = useState({name: '', avatar: ''});
 
   function handleAddStudent(){
+    // if(studentName === "" || studentName === null) return;
+    if(studentName.trim().length == 0) return;  //trim tira espaço do inicio e do final da string
     const newStudent: Student = {
       name: studentName,
       time: new Date().toLocaleTimeString("pt-br", {
@@ -19,6 +23,19 @@ export function Home() {
     };
 
     setStudents([...students, newStudent]);
+    setStudentName('');
+  }
+
+  function handleRemoveStudent(props: any){
+    console.log(students)
+    var student= students.find((stu: any) => stu.name == studentName);
+
+    if(student){
+      // setStudents([...students].splice(students == student.filter(), 1));
+      setStudents(students.filter(stu => stu != student))
+    }
+    console.log(students);
+
   }
 
   useEffect(()=>{
@@ -33,7 +50,7 @@ export function Home() {
   return (
     <div className='container'>
       <header>
-        <h1>Lista de presença</h1>
+        <h1>Lista de presença <span>{studentName}</span></h1>
 
         <div>
           <strong>{user.name}</strong>
@@ -41,19 +58,24 @@ export function Home() {
         </div>
       </header>
 
-      <input 
+      <Inputs 
         type= 'text' 
         placeholder= 'Digite o nome...' 
-        onChange={e => setStudentName(e.target.value)}
+        onChange={(e:any) => setStudentName(e.target.value)}
+        value= {studentName}
       />
 
-      <button type='button' onClick={handleAddStudent}>
-        Adicionar
-      </button>
+      <Button type='button' onClick={handleAddStudent} >
+        adicionar
+      </Button>
       
       {
         students.map(student => <Card key={student.time} name={student.name} time={student.time} />)        
       }
+
+      <Button type='button' onClick={handleRemoveStudent}>
+        remover
+      </Button>
     </div>
   )
 }
