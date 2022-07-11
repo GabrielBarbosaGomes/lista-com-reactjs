@@ -34,8 +34,7 @@ export function Home() {
       // setStudents([...students].splice(students == student.filter(), 1));
       setStudents(students.filter(stu => stu != student))
     }
-    console.log(students);
-
+    setStudentName('');
   }
 
   useEffect(()=>{
